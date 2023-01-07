@@ -42,11 +42,11 @@ class UnittypeController extends Controller
             'code' => 'required',
             'name' => 'required',
         ]);
-      
-    
+
+
         $data->code = $request->code;
         $data->name = $request->name;
-      
+
         $data->save();
     }
 
@@ -85,12 +85,14 @@ class UnittypeController extends Controller
             'code' => 'required',
             'name' => 'required',
         ]);
-      
-    
+
+
         $unittype->code = $request->code;
         $unittype->name = $request->name;
         $unittype->update();
     }
+
+
 
     /**
      * Remove the specified resource from storage.

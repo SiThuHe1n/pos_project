@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\product_stock;
+use App\Models\Product;
+use App\Models\Unittype;
 use App\Models\PurchaseDetail;
 use App\Http\Requests\StorePurchaseDetailRequest;
 use App\Http\Requests\UpdatePurchaseDetailRequest;
@@ -47,9 +49,28 @@ class PurchaseDetailController extends Controller
      */
     public function show(PurchaseDetail $purchaseDetail)
     {
-        //
-    }
 
+    }
+    public function showdetail($id)
+    {
+        $data=PurchaseDetail::where('purchase_id',$id)->get();
+
+
+
+        foreach($data as $dat)
+        {
+            $stock = product_stock::find( $dat->productstock_id);
+            $unitname=Unittype::where('code',$stock->unittype_id)->first();
+            $dat->productstock_id=$unitname->name;
+
+            $product = Product::find( $dat->product_id);
+
+            $dat->product_id=$product->name;
+        }
+
+
+        return response()->json($data, 200);
+    }
     /**
      * Show the form for editing the specified resource.
      *

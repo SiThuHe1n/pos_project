@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\purchase;
+use App\Models\PurchaseDetail;
+use App\Models\product_stock;
 use App\Http\Requests\StorepurchaseRequest;
 use App\Http\Requests\UpdatepurchaseRequest;
 
@@ -15,7 +17,8 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-        //
+        $data=purchase::all();
+        return response()->json($data, 200);
     }
 
     /**
@@ -36,7 +39,36 @@ class PurchaseController extends Controller
      */
     public function store(StorepurchaseRequest $request)
     {
-        //
+        $data=new Purchase();
+        $data->date=$request->purchasdate;
+        $data->totalprice=$request->totalprice;
+        $data->supplier_id=$request->supplier;
+        $data->totalpaid=$request->totalpaid;
+        $data->save();
+
+        foreach (json_decode($request->productdata) as $pdetail) {
+            $detail=new PurchaseDetail();
+            $detail->purchase_id=$data->id;
+            $detail->product_id=$pdetail->pid;
+            $detail->productstock_id=$pdetail->mtype;
+            $detail->amount=$pdetail->qty;
+            $detail->price=$pdetail->pprice;
+            $detail->note=$pdetail->desc;
+            $detail->save();
+
+            $product_stock=product_stock::find($pdetail->mtype);
+            $product_stock->amount+=$pdetail->qty;
+            $product_stock->purchaseprice=$pdetail->pprice;
+            $product_stock->save();
+        }
+
+
+
+
+
+
+
+
     }
 
     /**
@@ -47,7 +79,7 @@ class PurchaseController extends Controller
      */
     public function show(purchase $purchase)
     {
-        //
+
     }
 
     /**

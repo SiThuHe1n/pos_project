@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-      
+
     }
 
     /**
@@ -37,22 +37,20 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-  
+
         $data = new Product;
         // $request->validate([
         //     'code' => 'required',
         //     'name' => 'required',
         // ]);
-   
+
         $data->code = $request->code;
         $data->name = $request->name;
         $data->brand_id = $request->brand;
         $data->category_id = $request->category;
         $data->subcategory_id = $request->subcategory;
-        $data->unittype_id = $request->unittype;
         $data->description = $request->description;
-        $data->amount = $request->amount;
-        $data->purchase_price = $request->price;
+
         $data->save();
         $alldata=Product::all();
 
@@ -89,7 +87,16 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+
+        $product->code = $request->code;
+        $product->name = $request->name;
+        $product->brand_id = $request->brand;
+        $product->category_id = $request->category;
+        $product->subcategory_id = $request->subcategory;
+        $product->description = $request->description;
+
+        $data->update();
+
     }
 
     /**
@@ -100,6 +107,6 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->delete();
     }
 }
