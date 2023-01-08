@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\purchase;
-use App\Models\PurchaseDetail;
+use App\Models\Supplier;
 use App\Models\product_stock;
+use App\Models\PurchaseDetail;
 use App\Http\Requests\StorepurchaseRequest;
 use App\Http\Requests\UpdatepurchaseRequest;
 
@@ -44,7 +45,16 @@ class PurchaseController extends Controller
         $data->totalprice=$request->totalprice;
         $data->supplier_id=$request->supplier;
         $data->totalpaid=$request->totalpaid;
+        $needtopaid=$request->totalprice-$request->totalpaid;
         $data->save();
+        $sup=Supplier::where('code',$request->supplier)->first();
+        $sup->purchaseamount+=$request->totalprice;
+        if( $sup->needtopaid!=0 && $request->totalprice<$request->totalpaid)
+        {
+            $sup->needtopaid+=$needtopaid;
+        }
+
+        $sup->update();
 
         foreach (json_decode($request->productdata) as $pdetail) {
             $detail=new PurchaseDetail();
@@ -60,6 +70,8 @@ class PurchaseController extends Controller
             $product_stock->amount+=$pdetail->qty;
             $product_stock->purchaseprice=$pdetail->pprice;
             $product_stock->save();
+
+
         }
 
 

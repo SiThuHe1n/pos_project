@@ -120,7 +120,7 @@ class ProductStockController extends Controller
 
         $product_stock->update();
     }
-    public function doshow($id,Request $request)
+    public function doshow($id)
     {
         $product_stock=product_stock::where('product_id',$id)->get();
       return response()->json($product_stock, 200);

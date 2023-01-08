@@ -9,6 +9,7 @@ use App\Http\Controllers\PurchaseController;
 
 
 
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnittypeController;
 use App\Http\Controllers\SubcategoryController;
 use App\Http\Controllers\ProductStockController;
@@ -29,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::apiResource('supplier', SupplierController::class);
 Route::apiResource('brand', BrandController::class);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('subcategory', SubcategoryController::class);

@@ -26,7 +26,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -38,12 +38,12 @@ class BrandController extends Controller
     public function store(StoreBrandRequest $request)
     {
         $data = new Brand;
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required',
-        ]);
-      
-    
+        // $request->validate([
+        //     'code' => 'required',
+        //     'name' => 'required',
+        // ]);
+
+
         $data->code = $request->code;
         $data->name = $request->name;
         $data->save();
@@ -68,7 +68,7 @@ class BrandController extends Controller
      */
     public function edit(Brand $brand)
     {
-        
+
     }
 
     /**
@@ -85,8 +85,8 @@ class BrandController extends Controller
             'code' => 'required',
             'name' => 'required',
         ]);
-      
-    
+
+
         $brand->code = $request->code;
         $brand->name = $request->name;
         $brand->update();
