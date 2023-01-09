@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Unittype;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreUnittypeRequest;
 use App\Http\Requests\UpdateUnittypeRequest;
 
@@ -38,13 +40,16 @@ class UnittypeController extends Controller
     public function store(StoreUnittypeRequest $request)
     {
         $data = new Unittype;
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required',
-        ]);
+        if($request->code || $request->code=="")
+        {
+$data->code=Str::random(8);
+        }
+        else{
+            $data->code = $request->code;
+        }
 
 
-        $data->code = $request->code;
+    
         $data->name = $request->name;
 
         $data->save();
@@ -102,6 +107,10 @@ class UnittypeController extends Controller
      */
     public function destroy(Unittype $unittype)
     {
+        $data=Product::where('unittype_id',$unittype->code)->get();
+        if(count($data)==0)
+        {
         $unittype->delete();
+        }
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Subcategory;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreSubcategoryRequest;
 use App\Http\Requests\UpdateSubcategoryRequest;
 
@@ -38,12 +40,19 @@ class SubcategoryController extends Controller
     public function store(StoreSubcategoryRequest $request)
     {
         $data = new Subcategory;
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required',
-        ]);
+        if($request->code || $request->code=="")
+        {
+$data->code=Str::random(8);
+        }
+        else{
+            $data->code = $request->code;
+        }
+        // $request->validate([
+        //     'code' => 'required',
+        //     'name' => 'required',
+        // ]);
+
    
-        $data->code = $request->code;
         $data->name = $request->name;
         $data->save();
     }
@@ -83,8 +92,8 @@ class SubcategoryController extends Controller
             'code' => 'required',
             'name' => 'required',
         ]);
-      
-    
+
+
         $subcategory->code = $request->code;
         $subcategory->name = $request->name;
         $subcategory->update();
@@ -98,6 +107,10 @@ class SubcategoryController extends Controller
      */
     public function destroy(Subcategory $subcategory)
     {
+        $data=Product::where('subcategory_id',$subcategory->code)->get();
+        if(count($data)==0)
+        {
         $subcategory->delete();
+        }
     }
 }

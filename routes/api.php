@@ -4,11 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SellingController;
 use App\Http\Controllers\CategoryController;
+
+
+
 use App\Http\Controllers\PurchaseController;
-
-
-
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnittypeController;
 use App\Http\Controllers\SubcategoryController;
@@ -29,6 +30,7 @@ use App\Http\Controllers\PurchaseDetailController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware(['auth'])->group(function () {
 
 Route::apiResource('supplier', SupplierController::class);
 Route::apiResource('brand', BrandController::class);
@@ -39,6 +41,10 @@ Route::apiResource('product', ProductController::class);
 Route::apiResource('productstock', ProductStockController::class);
 
 Route::apiResource('purchase', PurchaseController::class);
+Route::apiResource('selling', SellingController::class);
+
+
+
 
 Route::post('/deletestock/{id}', [ProductStockController::class, 'dodelete']);
 Route::post('/updatestock/{id}', [ProductStockController::class, 'doupdate']);
@@ -49,5 +55,9 @@ Route::get('/stocknamewithid/{id}', [ProductStockController::class, 'stocknamewi
 
 Route::get('/purchasedetail/{id}', [PurchaseDetailController::class, 'showdetail']);
 
+
+Route::get('/saledetail/{id}', [SellingController::class, 'showdetail']);
+
+})
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\product_stock;
 
 class ProductController extends Controller
 {
@@ -107,6 +108,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $data=product_stock::where('product_id',$product->id)->get();
+        if(count($data)==0)
+        {
         $product->delete();
+        }
     }
 }

@@ -49,7 +49,7 @@ class PurchaseController extends Controller
         $data->save();
         $sup=Supplier::where('code',$request->supplier)->first();
         $sup->purchaseamount+=$request->totalprice;
-        if( $sup->needtopaid!=0 && $request->totalprice<$request->totalpaid)
+        if( $needtopaid!=0 && $request->totalprice>$request->totalpaid)
         {
             $sup->needtopaid+=$needtopaid;
         }

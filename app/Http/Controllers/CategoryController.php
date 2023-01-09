@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -38,13 +39,16 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $data = new Category;
-        $request->validate([
-            'code' => 'required',
-            'name' => 'required',
-        ]);
-      
-    
-        $data->code = $request->code;
+        if($request->code || $request->code=="")
+        {
+$data->code=Str::random(8);
+        }
+        else{
+            $data->code = $request->code;
+        }
+
+
+
         $data->name = $request->name;
         $data->save();
     }
@@ -80,13 +84,13 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-       
+
         $request->validate([
             'code' => 'required',
             'name' => 'required',
         ]);
-      
-    
+
+
         $category->code = $request->code;
         $category->name = $request->name;
         $category->update();
@@ -100,9 +104,13 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-   
-        $category->delete();
+        $data=Product::where('category_id',$category->code)->get();
+        if(count($data)==0)
+        {
+            $category->delete();
+        }
 
-    
+
+
     }
 }

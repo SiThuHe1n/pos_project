@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Product;
+use Illuminate\Support\Str;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 
@@ -43,8 +45,14 @@ class BrandController extends Controller
         //     'name' => 'required',
         // ]);
 
+        if($request->code || $request->code=="")
+        {
+$data->code=Str::random(8);
+        }
+        else{
+            $data->code = $request->code;
+        }
 
-        $data->code = $request->code;
         $data->name = $request->name;
         $data->save();
     }
@@ -81,13 +89,13 @@ class BrandController extends Controller
     public function update(UpdateBrandRequest $request, Brand $brand)
     {
 
-           $request->validate([
-            'code' => 'required',
-            'name' => 'required',
-        ]);
+        //    $request->validate([
+        //     'code' => 'required',
+        //     'name' => 'required',
+        // ]);
 
 
-        $brand->code = $request->code;
+
         $brand->name = $request->name;
         $brand->update();
     }
@@ -100,6 +108,10 @@ class BrandController extends Controller
      */
     public function destroy(Brand $brand)
     {
+        $data=Product::where('brand_id',$brand->code)->get();
+        if(count($data)==0)
+        {
         $brand->delete();
+        }
     }
 }
